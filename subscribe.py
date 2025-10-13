@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+import json
 
 # Параметры
 MQTT_BROKER = "localhost"
@@ -11,7 +12,17 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe(DEVICE_TOPIC)
 
 def on_message(client, userdata, msg):
+    try:
+        payload = json.loads(msg.payload.decode())  # превращаем JSON-строку в dict
+    except json.JSONDecodeError:
+        print(f"Invalid JSON: {msg.payload.decode()}")
+        return
+    presence = payload.get("presence", False)
     print(f"Topic: {msg.topic}, Payload: {msg.payload.decode()}")
+    if presence:
+        print("Хуйло детектед!")
+    else:
+        print("No presence detected.")
 
 # Настройка клиента
 client = mqtt.Client()
