@@ -1,19 +1,27 @@
-import paho.mqtt.client as mqtt
 import json
+
+import paho.mqtt.client as mqtt
+from pydantic import BaseModel
+
+from src.models.TemperatureSensorResult import TemperatureSensorResult
 
 # Параметры
 MQTT_BROKER = "localhost"
 MQTT_PORT = 1883
-DEVICE_TOPIC = "zigbee2mqtt/presence_sensor"  # замени на имя твоего устройства
+DEVICE_TOPIC = "zigbee2mqtt/temperature_sensor"  # замени на имя твоего устройства
+
+
+
 
 # Функции обратного вызова
 def on_connect(client, userdata, flags, rc):
     print(f"Connected with result code {rc}")
     client.subscribe(DEVICE_TOPIC)
 
+
 def on_message(client, userdata, msg):
     try:
-        payload = json.loads(msg.payload.decode())  # превращаем JSON-строку в dict
+        payload = TemperatureSensorResult(msg.payload.decode())  # превращаем JSON-строку в dict
     except json.JSONDecodeError:
         print(f"Invalid JSON: {msg.payload.decode()}")
         return
@@ -23,6 +31,7 @@ def on_message(client, userdata, msg):
         print("Хуйло детектед!")
     else:
         print("No presence detected.")
+
 
 # Настройка клиента
 client = mqtt.Client()
