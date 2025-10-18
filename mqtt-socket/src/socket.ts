@@ -25,7 +25,13 @@ const io = new Server<
   ServerToClientEvents,
   InterServerEvents,
   SocketData
->(8999);
+>(8999, {
+  cors: {
+    origin: "http://localhost:4200", // сюда твой Angular
+    methods: ["GET", "POST"],
+    credentials: true, // если используешь куки
+  }
+});
 console.log("Socket.io server initialized");
 
 export default io;
