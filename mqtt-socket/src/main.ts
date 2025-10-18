@@ -1,10 +1,8 @@
 import mqtt from 'mqtt';
 import config from './config';
+import socketIO from './socket';
 
-// Подключаемся к брокеру
 const client = mqtt.connect(`mqtt://${config.ip}:${config.port}`);
-
-// Топики, которые слушаем
 const TOPICS = [
   "zigbee2mqtt/temperature_sensor",
   "zigbee2mqtt/presence_sensor",
@@ -26,10 +24,11 @@ client.on("connect", () => {
   });
 });
 
-// Слушаем сообщения
-client.on("message", (topic, message) => {
-  console.log(`Message from ${topic}: ${message.toString()}`);
-});
-
 // Не закрываем клиент после первого сообщения
 // client.end() — удаляем
+
+socketIO.on("connection", (socket) => {
+  client.on("message", (topic, message) => {
+    socket.emit("mqttMessage", topic, message.toString());
+  });
+});
