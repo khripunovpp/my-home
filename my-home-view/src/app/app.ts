@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import {TemperatureComponent} from '../features/temperature.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, TemperatureComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
