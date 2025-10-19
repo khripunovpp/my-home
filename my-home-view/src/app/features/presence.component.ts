@@ -5,19 +5,19 @@ import {JsonPipe} from '@angular/common';
 @Component({
   selector: 'my-presence',
   template: `
-    <div>
-      <div [class.present]="presence()"
-           class="square">
-        {{ presence() ? 'Сука детектед' : '' }}
-      </div>
+    <div [class.present]="presence()"
+         class="square">
+      <span>{{ presence() ? 'Сука детектед' : '' }}</span>
     </div>`,
   imports: [
     JsonPipe
   ],
   styles: [`
+    :host {
+      width: 100%;
+    }
+
     .square {
-      width: 300px;
-      height: 300px;
       background-color: green;
       border-radius: 10px;
       display: flex;
@@ -26,6 +26,13 @@ import {JsonPipe} from '@angular/common';
       text-align: center;
       font-size: 24px;
       color: white;
+      padding-bottom: 100%;
+      width: 100%;
+      position: relative;
+
+      span {
+        position: absolute;
+      }
     }
 
     .present {

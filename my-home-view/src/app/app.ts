@@ -1,11 +1,12 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import {TemperatureComponent} from '../features/temperature.component';
-import {PresenceComponent} from '../features/presence.component';
+import {Component, signal} from '@angular/core';
+import {TemperatureComponent} from './features/temperature.component';
+import {PresenceComponent} from './features/presence.component';
+import {HomeGridComponent} from './features/grid/home-grid.component';
+import {GridCellComponent} from './features/grid/grid-cell.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TemperatureComponent, PresenceComponent],
+  imports: [TemperatureComponent, PresenceComponent, HomeGridComponent, GridCellComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
