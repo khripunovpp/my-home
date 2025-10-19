@@ -1,6 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {SensorsService} from './sensors.service';
 import {JsonPipe} from '@angular/common';
+import {SensorsService} from '../../shared/sensors.service';
 
 @Component({
   selector: 'my-light',
@@ -14,7 +14,7 @@ import {JsonPipe} from '@angular/common';
   styles: [`
   `]
 })
-export class LightComponent
+export class LightWidgetComponent
   implements OnInit {
   constructor() {
   }

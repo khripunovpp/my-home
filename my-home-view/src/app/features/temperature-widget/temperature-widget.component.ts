@@ -1,5 +1,5 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {SensorsService} from './sensors.service';
+import {SensorsService} from '../../shared/sensors.service';
 
 @Component({
   selector: 'my-temperature',
@@ -23,7 +23,7 @@ import {SensorsService} from './sensors.service';
     }
   `]
 })
-export class TemperatureComponent
+export class TemperatureWidgetComponent
   implements OnInit {
   constructor() {
   }

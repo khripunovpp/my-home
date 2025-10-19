@@ -1,13 +1,13 @@
 import {Component, signal} from '@angular/core';
-import {TemperatureComponent} from './features/temperature.component';
-import {PresenceComponent} from './features/presence.component';
+import {TemperatureWidgetComponent} from './features/temperature-widget/temperature-widget.component';
+import {PresenceWidgetComponent} from './features/presence-widget/presence-widget.component';
 import {HomeGridComponent} from './features/grid/home-grid.component';
 import {GridCellComponent} from './features/grid/grid-cell.component';
-import {LightComponent} from './features/light.component';
+import {LightWidgetComponent} from './features/light-widget/light-widget.component';
 
 @Component({
   selector: 'app-root',
-  imports: [TemperatureComponent, PresenceComponent, HomeGridComponent, GridCellComponent, LightComponent],
+  imports: [TemperatureWidgetComponent, PresenceWidgetComponent, HomeGridComponent, GridCellComponent, LightWidgetComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

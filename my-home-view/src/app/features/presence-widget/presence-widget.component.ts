@@ -1,5 +1,5 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {SensorsService} from './sensors.service';
+import {SensorsService} from '../../shared/sensors.service';
 import {JsonPipe} from '@angular/common';
 
 @Component({
@@ -40,7 +40,7 @@ import {JsonPipe} from '@angular/common';
     }
   `]
 })
-export class PresenceComponent
+export class PresenceWidgetComponent
   implements OnInit {
   constructor() {
   }
