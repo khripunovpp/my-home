@@ -16,7 +16,8 @@ export class SensorsService {
   private readonly _topics = {
     temperature: 'zigbee2mqtt/temperature_sensor',
     presence: 'zigbee2mqtt/presence_sensor',
-  }
+    office_light: 'zigbee2mqtt/office_lamp',
+  };
 
   listen() {
     this._socketService.onMessage((topic: string, data: string) => {
@@ -62,6 +63,21 @@ export class SensorsService {
             cb(JSON.parse(data));
           } catch (e) {
             console.error('Error parsing presence data:', e);
+            cb('');
+          }
+        }
+      }
+    });
+  }
+
+  listenOfficeLight(cb?: (data: unknown) => void) {
+    this._socketService.onMessage((topic: string, data: string) => {
+      if (topic === this._topics.office_light) {
+        if (cb) {
+          try {
+            cb(JSON.parse(data));
+          } catch (e) {
+            console.error('Error parsing office light data:', e);
             cb('');
           }
         }

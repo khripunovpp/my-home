@@ -1,6 +1,5 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {SensorsService} from './sensors.service';
-import {JsonPipe} from '@angular/common';
 
 @Component({
   selector: 'my-temperature',
@@ -13,9 +12,7 @@ import {JsonPipe} from '@angular/common';
         <span>Humidity: {{ temp.humidity }} %</span>
       </div>
     </div>`,
-  imports: [
-    JsonPipe
-  ],
+  imports: [],
   styles: [`
     .temperature-data {
       display: flex;
@@ -35,13 +32,11 @@ export class TemperatureComponent
   readonly temperature = signal({
     temperature: null,
     humidity: null,
-  })
+  });
 
   ngOnInit(): void {
-    this.sensorsService.listen();
     this.sensorsService.listenTemperature((data => {
       this.temperature.set(data as any);
     }));
-    this.sensorsService.listenPresence();
   }
 }
