@@ -1,42 +1,44 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {SensorsService} from '../../shared/sensors.service';
-import {JsonPipe} from '@angular/common';
 
 @Component({
   selector: 'my-presence',
   template: `
     <div [class.present]="presence()"
          class="square">
-      <span>{{ presence() ? 'Сука детектед' : '' }}</span>
+      <span>{{ presence() ? 'Сука детектед' : 'Тишь да гладь' }}</span>
     </div>`,
-  imports: [
-    JsonPipe
-  ],
+  imports: [],
   styles: [`
     :host {
       width: 100%;
     }
 
     .square {
-      background-color: green;
+      background-color: #e7fdff;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      font-size: 24px;
-      color: white;
+      font-size: clamp(14px, 2.5vw, 24px);
       padding-bottom: 100%;
       width: 100%;
       position: relative;
+      color: #565656;
+      white-space: nowrap;
 
       span {
         position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
     }
 
     .present {
-      background-color: red;
+      color: white;
+      background-color: #ff9800;
     }
   `]
 })
