@@ -60,9 +60,7 @@ export class SensorsService {
     });
   }
 
-  pairDevice(
-    sensorName: string,
-  ) {
+  pairDevice() {
     this._socketService.sendMessage({
       topic: 'zigbee2mqtt/bridge/request/permit_join',
       message: JSON.stringify({value: true, time: 120}),
