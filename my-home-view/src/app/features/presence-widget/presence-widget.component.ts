@@ -1,5 +1,5 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {SensorsService} from '../../shared/sensors.service';
+import {SensorsService} from '../../shared/sensors/sensors.service';
 
 @Component({
   selector: 'my-presence',
@@ -51,8 +51,8 @@ export class PresenceWidgetComponent
   readonly presence = signal(false)
 
   ngOnInit(): void {
-    this.sensorsService.listenPresence((data => {
-      this.presence.set((data as any).presence);
-    }));
+    // this.sensorsService.listenPresence((data => {
+    //   this.presence.set((data as any).presence);
+    // }));
   }
 }

@@ -1,5 +1,5 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import {SensorsService} from '../../shared/sensors.service';
+import {SensorsService} from '../../shared/sensors/sensors.service';
 
 @Component({
   selector: 'my-temperature',
@@ -94,9 +94,9 @@ export class TemperatureWidgetComponent
   });
 
   ngOnInit(): void {
-    this.sensorsService.listenTemperature((data => {
-      this.temperature.set(data as any);
-    }));
+    // this.sensorsService.listenTemperature((data => {
+    //   this.temperature.set(data as any);
+    // }));
   }
 
   private _getTempClass(temp: number): string {

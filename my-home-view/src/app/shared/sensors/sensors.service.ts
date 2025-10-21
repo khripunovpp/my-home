@@ -1,5 +1,5 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {SocketService} from './socket.service';
+import {SocketService} from '../socket.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +8,7 @@ export class SensorsService {
   constructor() {
   }
 
+// pashtitto@pashtitto:~ $ mosquitto_pub -h localhost -t "zigbee2mqtt/bridge/request/permit_join" -m '{"value":true,"time":120}'
   messages = signal<{
     topic: string
     data: any
@@ -16,18 +17,46 @@ export class SensorsService {
   private readonly _topics = {
     temperature: 'zigbee2mqtt/temperature_sensor',
     presence: 'zigbee2mqtt/presence_sensor',
-    office_light: 'zigbee2mqtt/office_lamp',
+    office_lamp: 'zigbee2mqtt/office_lamp',
   };
 
-  listen() {
+  listenSensor(
+    sensorName: string,
+    cb?: (data: unknown) => void,
+  ) {
+    const topic = this._topics[sensorName as keyof typeof this._topics];
     this._socketService.onMessage((topic: string, data: string) => {
-      this.messages.update((msgs) => [
-        ...msgs,
-        {
-          topic,
-          data: JSON.parse(data),
-        },
-      ]);
+      if (topic === topic) {
+        if (cb) {
+          try {
+            const parsedData = JSON.parse(data);
+            this._storeLastMessage(topic, parsedData);
+            cb(parsedData);
+          } catch (e) {
+            console.error('Error parsing temperature data:', e);
+            cb('');
+          }
+        }
+      }
+    });
+
+    if (cb) {
+      const lastMessage = this._retrieveLastMessage(topic);
+      if (lastMessage) {
+        cb(lastMessage);
+      }
+    }
+  }
+
+  sendCommand(
+    sensorName: string,
+    data: Record<string, any>,
+  ) {
+    const topic = this._topics[sensorName as keyof typeof this._topics];
+    const message = JSON.stringify(data);
+    this._socketService.sendMessage({
+      topic: topic + '/set',
+      message,
     });
   }
 
@@ -63,21 +92,6 @@ export class SensorsService {
             cb(JSON.parse(data));
           } catch (e) {
             console.error('Error parsing presence data:', e);
-            cb('');
-          }
-        }
-      }
-    });
-  }
-
-  listenOfficeLight(cb?: (data: unknown) => void) {
-    this._socketService.onMessage((topic: string, data: string) => {
-      if (topic === this._topics.office_light) {
-        if (cb) {
-          try {
-            cb(JSON.parse(data));
-          } catch (e) {
-            console.error('Error parsing office light data:', e);
             cb('');
           }
         }

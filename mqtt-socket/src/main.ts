@@ -28,7 +28,21 @@ client.on("connect", () => {
 // client.end() — удаляем
 
 socketIO.on("connection", (socket) => {
-  client.on("message", (topic, message) => {
-    socket.emit("mqttMessage", topic, message.toString());
+  console.log("New client connected", socket.id);
+
+  socket.on("mqttMessage", (topic, message) => {
+    console.log("Received from socket.io client:", topic, message);
+    client.publish(topic, message);
   });
+});
+
+client.on("message", (topic, message) => {
+  console.log("Received from MQTT broker:", topic, message.toString());
+  socketIO.emit("mqttMessage", topic, message.toString());
+});
+
+// on recieving messages from soket.io clients
+socketIO.on("new_namespace", (...args) => {
+  console.log("New namespace created", args);
+  // client.publish(topic, message);
 });

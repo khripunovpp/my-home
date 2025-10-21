@@ -8,11 +8,13 @@ interface ServerToClientEvents {
 }
 
 interface ClientToServerEvents {
-  hello: () => void;
+  ping: () => void;
+  mqttMessage: (topic: string, message: string) => void;
 }
 
 interface InterServerEvents {
   ping: () => void;
+  mqttMessage: (topic: string, message: string) => void;
 }
 
 interface SocketData {
