@@ -1,5 +1,6 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import {SensorsService} from '../../shared/sensors/sensors.service';
+import {TemperatureSensorService} from '../../shared/sensors/temperature-sensor.service';
+import {SENSOR_NAME} from '../../shared/sensors/sensor-name.token';
 
 @Component({
   selector: 'my-temperature',
@@ -51,7 +52,14 @@ import {SensorsService} from '../../shared/sensors/sensors.service';
       }
     }
 
-  `]
+  `],
+  providers: [
+    TemperatureSensorService,
+    {
+      provide: SENSOR_NAME,
+      useValue: 'temperature',
+    },
+  ]
 })
 export class TemperatureWidgetComponent
   implements OnInit {
@@ -74,7 +82,7 @@ export class TemperatureWidgetComponent
     ['warm', ['#ff9966', '#ff5e62', '#ff9966', '#ff5e62']],
     ['hot', ['#ff416c', '#ff4b2b', '#ff416c', '#ff4b2b']],
   ]);
-  readonly sensorsService = inject(SensorsService);
+  readonly sensorsService = inject(TemperatureSensorService);
   readonly temperature = signal({
     temperature: null,
     humidity: null,
@@ -94,9 +102,9 @@ export class TemperatureWidgetComponent
   });
 
   ngOnInit(): void {
-    // this.sensorsService.listenTemperature((data => {
-    //   this.temperature.set(data as any);
-    // }));
+    this.sensorsService.listen((data => {
+      this.temperature.set(data as any);
+    }));
   }
 
   private _getTempClass(temp: number): string {

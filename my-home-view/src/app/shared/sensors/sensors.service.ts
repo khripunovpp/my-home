@@ -25,8 +25,8 @@ export class SensorsService {
     cb?: (data: unknown) => void,
   ) {
     const topic = this._topics[sensorName as keyof typeof this._topics];
-    this._socketService.onMessage((topic: string, data: string) => {
-      if (topic === topic) {
+    this._socketService.onMessage((incomingTopic: string, data: string) => {
+      if (topic === incomingTopic) {
         if (cb) {
           try {
             const parsedData = JSON.parse(data);
@@ -60,42 +60,12 @@ export class SensorsService {
     });
   }
 
-  listenTemperature(cb?: (data: unknown) => void) {
-    this._socketService.onMessage((topic: string, data: string) => {
-      if (topic === this._topics.temperature) {
-        if (cb) {
-          try {
-            const parsedData = JSON.parse(data);
-            this._storeLastMessage(this._topics.temperature, parsedData);
-            cb(parsedData);
-          } catch (e) {
-            console.error('Error parsing temperature data:', e);
-            cb('');
-          }
-        }
-      }
-    });
-
-    if (cb) {
-      const lastMessage = this._retrieveLastMessage(this._topics.temperature);
-      if (lastMessage) {
-        cb(lastMessage);
-      }
-    }
-  }
-
-  listenPresence(cb?: (data: unknown) => void) {
-    this._socketService.onMessage((topic: string, data: string) => {
-      if (topic === 'zigbee2mqtt/presence_sensor') {
-        if (cb) {
-          try {
-            cb(JSON.parse(data));
-          } catch (e) {
-            console.error('Error parsing presence data:', e);
-            cb('');
-          }
-        }
-      }
+  pairDevice(
+    sensorName: string,
+  ) {
+    this._socketService.sendMessage({
+      topic: 'zigbee2mqtt/bridge/request/permit_join',
+      message: JSON.stringify({value: true, time: 120}),
     });
   }
 

@@ -1,5 +1,6 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {SensorsService} from '../../shared/sensors/sensors.service';
+import {PresenceSensorService} from '../../shared/sensors/presence-sensor.service';
+import {SENSOR_NAME} from '../../shared/sensors/sensor-name.token';
 
 @Component({
   selector: 'my-presence',
@@ -40,19 +41,26 @@ import {SensorsService} from '../../shared/sensors/sensors.service';
       color: white;
       background-color: #ff9800;
     }
-  `]
+  `],
+  providers: [
+    PresenceSensorService,
+    {
+      provide: SENSOR_NAME,
+      useValue: 'presence',
+    },
+  ]
 })
 export class PresenceWidgetComponent
   implements OnInit {
   constructor() {
   }
 
-  readonly sensorsService = inject(SensorsService);
+  readonly sensorsService = inject(PresenceSensorService);
   readonly presence = signal(false)
 
   ngOnInit(): void {
-    // this.sensorsService.listenPresence((data => {
-    //   this.presence.set((data as any).presence);
-    // }));
+    this.sensorsService.listen((data => {
+      this.presence.set((data as any).presence);
+    }));
   }
 }
