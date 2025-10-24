@@ -1,7 +1,9 @@
 import {Component, computed, inject, OnInit, signal} from '@angular/core';
-import {LightSensorService} from '../../shared/sensors/light-sensor.service';
-import {SENSOR_NAME} from '../../shared/sensors/sensor-name.token';
-import {SensorsService} from '../../shared/sensors/sensors.service';
+import {LightSensorService} from '../../../shared/sensors/light-sensor.service';
+import {SENSOR_NAME} from '../../../shared/sensors/sensor-name.token';
+import {SensorsService} from '../../../shared/sensors/sensors.service';
+import {JsonPipe} from '@angular/common';
+import {lightSensorFromJson} from '../light-sensor.factory';
 
 @Component({
   selector: 'my-light',
@@ -18,12 +20,14 @@ import {SensorsService} from '../../shared/sensors/sensors.service';
           {{ lightIsOn() ? 'Switch Off' : 'Switch On' }}
         </div>
       </button>
-      <br>
-      <button (click)="onClick()">
-        Click
-      </button>
+<!--      <br>-->
+<!--      <button (click)="onClick()">-->
+<!--        Click-->
+<!--      </button>-->
     </div>`,
-  imports: [],
+  imports: [
+    JsonPipe
+  ],
   styles: [`
     .light-switch-button {
       background: none;
@@ -55,16 +59,14 @@ export class LightWidgetComponent
   constructor() {
   }
 
-  private readonly _sensorsService = inject(SensorsService);
   readonly sensorsService = inject(LightSensorService);
-  readonly light = signal({
-    state: 'OFF',
-  });
+  readonly light = signal(lightSensorFromJson());
   readonly lightIsOn = computed(() => this.light().state === 'ON');
+  private readonly _sensorsService = inject(SensorsService);
 
   ngOnInit(): void {
     this.sensorsService.listen((data => {
-      this.light.set(data as any);
+      this.light.set(lightSensorFromJson(data) as any);
     }));
   }
 
@@ -74,6 +76,6 @@ export class LightWidgetComponent
   }
 
   onClick() {
-    this._sensorsService.requestIEEAddress();
+
   }
 }
