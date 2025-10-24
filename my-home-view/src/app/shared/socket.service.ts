@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {io, Socket} from 'socket.io-client';
+import env from '../../env';
 
 @Injectable({providedIn: 'root'})
 export class SocketService {
   constructor() {
-    this.socket = io('http://localhost:8999'); // Connect to Socket.IO server
+    this.socket = io(`http://${env.socket_ip}:${env.socket_port}`);
   }
 
   private socket: Socket;

@@ -1,4 +1,5 @@
 import {Server} from "socket.io";
+import config from './config';
 
 interface ServerToClientEvents {
   noArg: () => void;
@@ -22,18 +23,19 @@ interface SocketData {
   age: number;
 }
 
+const options = {
+  cors: {
+    origin: config.client_origin, // сюда твой Angular
+    methods: ["GET", "POST"],
+    credentials: true, // если используешь куки
+  }
+};
 const io = new Server<
   ClientToServerEvents,
   ServerToClientEvents,
   InterServerEvents,
   SocketData
->(8999, {
-  cors: {
-    origin: "http://localhost:4200", // сюда твой Angular
-    methods: ["GET", "POST"],
-    credentials: true, // если используешь куки
-  }
-});
-console.log("Socket.io server initialized");
+>(config.socket_port, options);
+console.log("Socket.io server initialized", {options});
 
 export default io;

@@ -2,7 +2,10 @@ import mqtt from 'mqtt';
 import config from './config';
 import socketIO from './socket';
 
-const client = mqtt.connect(`mqtt://${config.ip}:${config.port}`);
+const url = `mqtt://${config.mqtt_ip}:${config.mqtt_port}`;
+const client = mqtt.connect(url);
+console.log("MQTT client connecting to:", url);
+
 const TOPICS = [
   "zigbee2mqtt/temperature_sensor",
   "zigbee2mqtt/presence_sensor",
@@ -14,6 +17,7 @@ client.on("connect", () => {
 
   // Подписываемся на все топики
   TOPICS.forEach(topic => {
+    console.log(`Subscribing to ${topic}`);
     client.subscribe(topic, {qos: 0}, (err, granted) => {
       if (err) {
         console.error("Subscribe error:", err);
