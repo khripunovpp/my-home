@@ -18,6 +18,10 @@ import {SensorsService} from '../../shared/sensors/sensors.service';
           {{ lightIsOn() ? 'Switch Off' : 'Switch On' }}
         </div>
       </button>
+      <br>
+      <button (click)="onClick()">
+        Click
+      </button>
     </div>`,
   imports: [],
   styles: [`
@@ -67,5 +71,9 @@ export class LightWidgetComponent
   toggleLight() {
     const newState = this.light().state === 'ON' ? 'OFF' : 'ON';
     this.sensorsService.switchLight(newState);
+  }
+
+  onClick() {
+    this._sensorsService.requestIEEAddress();
   }
 }

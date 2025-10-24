@@ -67,6 +67,22 @@ export class SensorsService {
     });
   }
 
+  requestIEEAddress() {
+    this._socketService.sendMessage({
+      topic: 'zigbee2mqtt/bridge/devices',
+      message:  JSON.stringify(''),
+    });
+  }
+
+  disconnectDevice(
+    ieeeAddress: string,
+  ) {
+    this._socketService.sendMessage({
+      topic: 'zigbee2mqtt/bridge/request/remove',
+      message: JSON.stringify({ieee_address: ieeeAddress}),
+    });
+  }
+
   private _keyFactory(topic: string) {
     return `sensors:${topic}`;
   }

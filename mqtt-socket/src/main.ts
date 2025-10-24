@@ -9,7 +9,8 @@ console.log("MQTT client connecting to:", url);
 const TOPICS = [
   "zigbee2mqtt/temperature_sensor",
   "zigbee2mqtt/presence_sensor",
-  "zigbee2mqtt/office_lamp"
+  "zigbee2mqtt/office_lamp",
+  "zigbee2mqtt/bridge/devices",
 ];
 
 client.on("connect", () => {
