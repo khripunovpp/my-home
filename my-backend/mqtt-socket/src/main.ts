@@ -2,17 +2,13 @@ import mqtt from 'mqtt';
 import config from './config';
 import socketIO from './socket';
 import {putData} from '../../db/db';
+import {TOPICS} from "../../../shared/const/topics.const";
+import {topicMessageModelFactory} from "../../../shared/topic-message-model.factory";
 
 const url = `mqtt://${config.mqtt_ip}:${config.mqtt_port}`;
 const client = mqtt.connect(url);
 console.log("MQTT client connecting to:", url);
 
-const TOPICS = [
-  "zigbee2mqtt/temperature_sensor",
-  "zigbee2mqtt/presence_sensor",
-  "zigbee2mqtt/office_lamp",
-  "zigbee2mqtt/bridge/devices",
-];
 
 client.on("connect", () => {
   console.log("Connected to MQTT broker");
@@ -44,9 +40,12 @@ socketIO.on("connection", (socket) => {
 
 client.on("message", (topic, message) => {
   const msgString = message.toString();
-  // сохраняем сообщение в БД
-  putData(topic, msgString);
   console.log("Received from MQTT broker:", topic, msgString);
+
+  const model = topicMessageModelFactory(topic, msgString);
+  const dtoString = JSON.stringify(model?.toJson());
+  putData(topic, dtoString);
+
   socketIO.emit("mqttMessage", topic, msgString);
 });
 

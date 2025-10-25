@@ -2,8 +2,7 @@ import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {LightSensorService} from '../../../shared/sensors/light-sensor.service';
 import {SENSOR_NAME} from '../../../shared/sensors/sensor-name.token';
 import {SensorsService} from '../../../shared/sensors/sensors.service';
-import {JsonPipe} from '@angular/common';
-import {lightSensorFromJson} from '../light-sensor.factory';
+import {lightSensorFromJson} from '../../../../../../shared/light/light-sensor.factory';
 
 @Component({
   selector: 'my-light',
@@ -20,14 +19,12 @@ import {lightSensorFromJson} from '../light-sensor.factory';
           {{ lightIsOn() ? 'Switch Off' : 'Switch On' }}
         </div>
       </button>
-<!--      <br>-->
-<!--      <button (click)="onClick()">-->
-<!--        Click-->
-<!--      </button>-->
+      <!--      <br>-->
+      <!--      <button (click)="onClick()">-->
+      <!--        Click-->
+      <!--      </button>-->
     </div>`,
-  imports: [
-    JsonPipe
-  ],
+  imports: [],
   styles: [`
     .light-switch-button {
       background: none;
