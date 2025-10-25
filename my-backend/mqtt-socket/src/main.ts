@@ -41,11 +41,7 @@ socketIO.on("connection", (socket) => {
 client.on("message", (topic, message) => {
   const msgString = message.toString();
   console.log("Received from MQTT broker:", topic, msgString);
-
-  const model = topicMessageModelFactory(topic, msgString);
-  const dtoString = JSON.stringify(model?.toJson());
-  putData(topic, dtoString);
-
+  putData(topic, msgString);
   socketIO.emit("mqttMessage", topic, msgString);
 });
 

@@ -6,7 +6,8 @@ import {devicesFromJson} from "./devices/device.factory";
 import {BaseModel} from "./base-model.model";
 import {temperatureSensorFromJson} from "./temperature/temperature-sensor.factory";
 
-export const topicMessageModelFactory = (topic: Topic, jsonString: string): BaseModel | null | undefined => {
+export function topicMessageModelFactory<T>(topic: Topic, jsonString: string): T;
+export function topicMessageModelFactory(topic: Topic, jsonString: string): BaseModel | BaseSensorModel {
   try {
     const json = JSON.parse(jsonString);
 

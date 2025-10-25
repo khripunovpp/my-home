@@ -5,4 +5,6 @@ export const TOPICS = [
   "zigbee2mqtt/bridge/devices",
 ];
 
-export type Topic = typeof TOPICS[number];
+export type Topic = {
+  [index: number]: typeof TOPICS[number]
+}
