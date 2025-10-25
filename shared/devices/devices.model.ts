@@ -1,12 +1,14 @@
 import {BaseModel} from "../base-model.model";
-import {ZigbeeDevice} from "./devices.types";
+import {DeviceSingleModel} from "./device-single.model";
 
 export class DevicesModel
   extends BaseModel {
 
-  devices: ZigbeeDevice[] = [];
+  devices: DeviceSingleModel[] = [];
 
   putDevice(device: any): void {
-    this.devices.push(device);
+    const model = new DeviceSingleModel();
+    model.device = device;
+    this.devices.push(model);
   }
 }

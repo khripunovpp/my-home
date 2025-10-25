@@ -49,6 +49,8 @@ export interface ZigbeeDevice {
   network_address?: number;
   power_source?: string;
   software_build_id?: string;
+
+  home_class?: string;
 }
 
 export interface DeviceDefinition {

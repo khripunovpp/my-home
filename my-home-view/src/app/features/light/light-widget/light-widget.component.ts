@@ -1,8 +1,10 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, input, OnInit, signal} from '@angular/core';
 import {LightSensorService} from '../../../shared/sensors/light-sensor.service';
 import {SENSOR_NAME} from '../../../shared/sensors/sensor-name.token';
 import {SensorsService} from '../../../shared/sensors/sensors.service';
 import {lightSensorFromJson} from '../../../../../../shared/light/light-sensor.factory';
+import {DevicesModel} from '../../../../../../shared/devices/devices.model';
+import {DeviceSingleModel} from '../../../../../../shared/devices/device-single.model';
 
 @Component({
   selector: 'my-light',
@@ -56,6 +58,7 @@ export class LightWidgetComponent
   constructor() {
   }
 
+  device = input.required<DeviceSingleModel>();
   readonly sensorsService = inject(LightSensorService);
   readonly light = signal(lightSensorFromJson());
   readonly lightIsOn = computed(() => this.light().state === 'ON');
