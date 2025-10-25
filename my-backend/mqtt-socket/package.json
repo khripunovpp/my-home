@@ -1,7 +1,6 @@
 {
   "name": "mqtt-socket",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/main.js",

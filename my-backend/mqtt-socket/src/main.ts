@@ -1,6 +1,7 @@
 import mqtt from 'mqtt';
 import config from './config';
 import socketIO from './socket';
+import {putData} from '../../db/db';
 
 const url = `mqtt://${config.mqtt_ip}:${config.mqtt_port}`;
 const client = mqtt.connect(url);
@@ -42,8 +43,11 @@ socketIO.on("connection", (socket) => {
 });
 
 client.on("message", (topic, message) => {
-  console.log("Received from MQTT broker:", topic, message.toString());
-  socketIO.emit("mqttMessage", topic, message.toString());
+  const msgString = message.toString();
+  // сохраняем сообщение в БД
+  putData(topic, msgString);
+  console.log("Received from MQTT broker:", topic, msgString);
+  socketIO.emit("mqttMessage", topic, msgString);
 });
 
 // on recieving messages from soket.io clients
