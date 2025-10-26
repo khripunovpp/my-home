@@ -1,8 +1,9 @@
 import {Component, computed, inject, input, OnInit, signal} from '@angular/core';
 import {LightSensorService} from '../../../shared/sensors/light-sensor.service';
-import {SensorsService} from '../../../shared/sensors/sensors.service';
 import {lightSensorFromJson} from '../../../../../../shared/light/light-sensor.factory';
 import {DeviceSingleModel} from '../../../../../../shared/devices/device-single.model';
+import {SliderComponent} from '../../../shared/slider.component';
+import {wrapDebounce} from '../../../../../../shared/helpers/debounce.helpers';
 
 @Component({
   selector: 'my-light',
@@ -19,12 +20,21 @@ import {DeviceSingleModel} from '../../../../../../shared/devices/device-single.
           {{ lightIsOn() ? 'Switch Off' : 'Switch On' }}
         </div>
       </button>
-      <!--      <br>-->
-      <!--      <button (click)="onClick()">-->
-      <!--        Click-->
-      <!--      </button>-->
+
+      Temperature:<br>
+      <my-slider (onChange)="debouncedTempChange($event)"
+                 [max]="6500"
+                 [min]="2700"></my-slider>
+      <br>
+      Brightness:<br>
+      <my-slider
+        (onChange)="debouncedBrightnessChange($event)"
+        [max]="254"
+        [min]="0"></my-slider>
     </div>`,
-  imports: [],
+  imports: [
+    SliderComponent
+  ],
   styles: [`
     .light-switch-button {
       background: none;
@@ -50,27 +60,30 @@ export class LightWidgetComponent
   constructor() {
   }
 
-  device = input<DeviceSingleModel>();
+  device = input.required<DeviceSingleModel>();
   readonly sensorsService = inject(LightSensorService);
   readonly light = signal(lightSensorFromJson());
   readonly lightIsOn = computed(() => this.light().state === 'ON');
-  private readonly _sensorsService = inject(SensorsService);
+  ieeeAddress = computed(() => this.device()?.device?.ieee_address || '');
+  readonly debouncedTempChange = wrapDebounce(this.onTempChange.bind(this), 300);
+  readonly debouncedBrightnessChange = wrapDebounce(this.onBrightnessChange.bind(this), 300);
 
   ngOnInit(): void {
-    if (!this.device()?.device) return;
-
-    this.sensorsService.listen(this.device()!.device!.ieee_address, (data => {
+    this.sensorsService.listen(this.ieeeAddress(), (data => {
       this.light.set(lightSensorFromJson(data) as any);
     }));
   }
 
   toggleLight() {
-    if (!this.device()?.device) return;
     const newState = this.light().state === 'ON' ? 'OFF' : 'ON';
     this.sensorsService.switchLight(this.device()!.device!.ieee_address, newState);
   }
 
-  onClick() {
+  onTempChange(colorTemp: number) {
+    this.sensorsService.adjustTemperature(this.device()!.device!.ieee_address, colorTemp);
+  }
 
+  onBrightnessChange(brightness: number) {
+    this.sensorsService.adjustBrightness(this.device()!.device!.ieee_address, brightness);
   }
 }
