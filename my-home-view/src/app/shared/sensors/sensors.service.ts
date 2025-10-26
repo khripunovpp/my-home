@@ -14,17 +14,12 @@ export class SensorsService {
     data: any
   }[]>([]);
   private readonly _socketService = inject(SocketService);
-  private readonly _topics = {
-    temperature: 'zigbee2mqtt/temperature_sensor',
-    presence: 'zigbee2mqtt/presence_sensor',
-    office_lamp: 'zigbee2mqtt/office_lamp',
-  };
 
   listenSensor(
     sensorName: string,
     cb?: (data: unknown) => void,
   ) {
-    const topic = this._topics[sensorName as keyof typeof this._topics];
+    const topic = `zigbee2mqtt/${sensorName}`;
     this._socketService.onMessage((incomingTopic: string, data: string) => {
       if (topic === incomingTopic) {
         if (cb) {
@@ -52,7 +47,7 @@ export class SensorsService {
     sensorName: string,
     data: Record<string, any>,
   ) {
-    const topic = this._topics[sensorName as keyof typeof this._topics];
+    const topic = `zigbee2mqtt/${sensorName}`;
     const message = JSON.stringify(data);
     this._socketService.sendMessage({
       topic: topic + '/set',

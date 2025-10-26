@@ -1,26 +1,29 @@
 import {inject, Injectable} from '@angular/core';
-import {SENSOR_NAME} from './sensor-name.token';
 import {SensorsService} from './sensors.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class LightSensorService {
   constructor() {
   }
 
   private readonly _sensorsService = inject(SensorsService);
-  private readonly _name = inject<string>(SENSOR_NAME);
 
   listen(
+    name: string,
     cb: (data: unknown) => void
   ) {
-    this._sensorsService.listenSensor(this._name, cb);
+    this._sensorsService.listenSensor(name, cb);
   }
 
-  switchLight(state: 'ON' | 'OFF') {
-    this._sensorsService.sendCommand(this._name, {
+  switchLight(
+    name: string,
+    state: 'ON' | 'OFF'
+  ) {
+    this._sensorsService.sendCommand(name, {
       state,
       brightness: 254,
     });
   }
-
 }

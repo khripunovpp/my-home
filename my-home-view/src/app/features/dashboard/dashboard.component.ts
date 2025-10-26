@@ -1,4 +1,4 @@
-import {Component, computed, inject, resource} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, resource} from '@angular/core';
 import {GridCellComponent} from '../grid/grid-cell.component';
 import {HomeGridComponent} from '../grid/home-grid.component';
 import {LightWidgetComponent} from '../light/light-widget/light-widget.component';
@@ -7,9 +7,11 @@ import {PresenceWidgetComponent} from '../presence-widget/presence-widget.compon
 import {TemperatureWidgetComponent} from '../temperature-widget/temperature-widget.component';
 import {firstValueFrom} from 'rxjs';
 import {DashboardService} from '../../shared/dashboard.service';
+import {NgComponentOutlet} from '@angular/common';
 
 @Component({
   selector: 'my-home-dashboard',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <my-home-pair-button></my-home-pair-button>
 
@@ -18,38 +20,31 @@ import {DashboardService} from '../../shared/dashboard.service';
         @switch (widget.type) {
           @case ('light') {
             <my-grid-cell>
-              <my-light [device]="widget.device"></my-light>
+              <ng-container
+                *ngComponentOutlet="LightWidgetComponent; inputs: {device:widget.device}"></ng-container>
             </my-grid-cell>
           }
           @case ('motion') {
             <my-grid-cell>
-              <my-presence></my-presence>
+              <ng-container
+                *ngComponentOutlet="PresenceWidgetComponent; inputs: {device:widget.device}"></ng-container>
             </my-grid-cell>
           }
           @case ('temperature') {
             <my-grid-cell>
-              <my-temperature></my-temperature>
+              <ng-container
+                *ngComponentOutlet="TemperatureWidgetComponent; inputs: {device:widget.device}"></ng-container>
             </my-grid-cell>
           }
         }
       }
-
-      <!--      <my-grid-cell>-->
-      <!--        <my-light></my-light>-->
-      <!--      </my-grid-cell>-->
-      <!--      -->
-      <!--      <my-grid-cell>-->
-      <!--        <my-presence></my-presence>-->
-      <!--      </my-grid-cell>-->
     </my-home-grid>
   `,
   imports: [
     GridCellComponent,
     HomeGridComponent,
-    LightWidgetComponent,
     PairButtonComponent,
-    PresenceWidgetComponent,
-    TemperatureWidgetComponent
+    NgComponentOutlet
   ],
   styles: [`
     :host {
@@ -61,13 +56,15 @@ import {DashboardService} from '../../shared/dashboard.service';
       padding: 16px;
       background-color: #f5f5f5;
     }
-
   `]
 })
 export class DashboardComponent {
   constructor() {
   }
 
+  protected readonly LightWidgetComponent = LightWidgetComponent;
+  protected readonly PresenceWidgetComponent = PresenceWidgetComponent;
+  protected readonly TemperatureWidgetComponent = TemperatureWidgetComponent;
   private readonly _dashboardService = inject(DashboardService);
   private resource = resource({
     params: () => ({}),
@@ -75,7 +72,6 @@ export class DashboardComponent {
   });
   readonly widgets = computed(() => {
     if (this.resource.hasValue()) {
-      console.log('Widgets loaded:', this.resource.value());
       return this.resource.value();
     }
     return undefined;

@@ -1,9 +1,7 @@
 import {Component, computed, inject, input, OnInit, signal} from '@angular/core';
 import {LightSensorService} from '../../../shared/sensors/light-sensor.service';
-import {SENSOR_NAME} from '../../../shared/sensors/sensor-name.token';
 import {SensorsService} from '../../../shared/sensors/sensors.service';
 import {lightSensorFromJson} from '../../../../../../shared/light/light-sensor.factory';
-import {DevicesModel} from '../../../../../../shared/devices/devices.model';
 import {DeviceSingleModel} from '../../../../../../shared/devices/device-single.model';
 
 @Component({
@@ -45,34 +43,31 @@ import {DeviceSingleModel} from '../../../../../../shared/devices/device-single.
       }
     }
   `],
-  providers: [
-    LightSensorService,
-    {
-      provide: SENSOR_NAME,
-      useValue: 'office_lamp',
-    },
-  ]
+  providers: []
 })
 export class LightWidgetComponent
   implements OnInit {
   constructor() {
   }
 
-  device = input.required<DeviceSingleModel>();
+  device = input<DeviceSingleModel>();
   readonly sensorsService = inject(LightSensorService);
   readonly light = signal(lightSensorFromJson());
   readonly lightIsOn = computed(() => this.light().state === 'ON');
   private readonly _sensorsService = inject(SensorsService);
 
   ngOnInit(): void {
-    this.sensorsService.listen((data => {
+    if (!this.device()?.device) return;
+
+    this.sensorsService.listen(this.device()!.device!.ieee_address, (data => {
       this.light.set(lightSensorFromJson(data) as any);
     }));
   }
 
   toggleLight() {
+    if (!this.device()?.device) return;
     const newState = this.light().state === 'ON' ? 'OFF' : 'ON';
-    this.sensorsService.switchLight(newState);
+    this.sensorsService.switchLight(this.device()!.device!.ieee_address, newState);
   }
 
   onClick() {

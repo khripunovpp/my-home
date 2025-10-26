@@ -1,6 +1,6 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, inject, input, OnInit, signal} from '@angular/core';
 import {PresenceSensorService} from '../../shared/sensors/presence-sensor.service';
-import {SENSOR_NAME} from '../../shared/sensors/sensor-name.token';
+import {DeviceSingleModel} from '../../../../../shared/devices/device-single.model';
 
 @Component({
   selector: 'my-presence',
@@ -42,24 +42,18 @@ import {SENSOR_NAME} from '../../shared/sensors/sensor-name.token';
       background-color: #ff9800;
     }
   `],
-  providers: [
-    PresenceSensorService,
-    {
-      provide: SENSOR_NAME,
-      useValue: 'presence',
-    },
-  ]
 })
 export class PresenceWidgetComponent
   implements OnInit {
   constructor() {
   }
 
+  device = input<DeviceSingleModel>();
   readonly sensorsService = inject(PresenceSensorService);
   readonly presence = signal(false)
 
   ngOnInit(): void {
-    this.sensorsService.listen((data => {
+    this.sensorsService.listen(this.device()!.device!.ieee_address, (data => {
       this.presence.set((data as any).presence);
     }));
   }

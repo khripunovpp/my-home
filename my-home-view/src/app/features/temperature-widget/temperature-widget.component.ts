@@ -1,6 +1,6 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, input, OnInit, signal} from '@angular/core';
 import {TemperatureSensorService} from '../../shared/sensors/temperature-sensor.service';
-import {SENSOR_NAME} from '../../shared/sensors/sensor-name.token';
+import {DeviceSingleModel} from '../../../../../shared/devices/device-single.model';
 
 @Component({
   selector: 'my-temperature',
@@ -53,19 +53,13 @@ import {SENSOR_NAME} from '../../shared/sensors/sensor-name.token';
     }
 
   `],
-  providers: [
-    TemperatureSensorService,
-    {
-      provide: SENSOR_NAME,
-      useValue: 'temperature',
-    },
-  ]
 })
 export class TemperatureWidgetComponent
   implements OnInit {
   constructor() {
   }
 
+  device = input<DeviceSingleModel>();
   readonly tempMap = new Map([
     [[-100, 5], 'freezing'],
     [[5, 15], 'cold'],
@@ -102,7 +96,7 @@ export class TemperatureWidgetComponent
   });
 
   ngOnInit(): void {
-    this.sensorsService.listen((data => {
+    this.sensorsService.listen(this.device()!.device!.ieee_address, (data => {
       this.temperature.set(data as any);
     }));
   }
