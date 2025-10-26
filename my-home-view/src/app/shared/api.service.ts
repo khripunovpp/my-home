@@ -1,5 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {inject, Injectable} from '@angular/core';
+import env from '../../env';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,8 @@ export class ApiService {
   }
 
   private readonly _httpClient = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = `http://${env.api_ip}:${env.api_port}/api`;
+
 
   getApiUrl(): string {
     return this.apiUrl;

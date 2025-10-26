@@ -4,6 +4,7 @@ import {lightSensorFromJson} from '../../../../../../shared/light/light-sensor.f
 import {DeviceSingleModel} from '../../../../../../shared/devices/device-single.model';
 import {SliderComponent} from '../../../shared/slider.component';
 import {wrapDebounce} from '../../../../../../shared/helpers/debounce.helpers';
+import {ColorPickerComponent} from '../../../shared/color-picker.component';
 
 @Component({
   selector: 'my-light',
@@ -31,9 +32,12 @@ import {wrapDebounce} from '../../../../../../shared/helpers/debounce.helpers';
         (onChange)="debouncedBrightnessChange($event)"
         [max]="254"
         [min]="0"></my-slider>
+      <br>
+      <my-color-picker (colorChange)="debouncedColorChange($event)"></my-color-picker>
     </div>`,
   imports: [
-    SliderComponent
+    SliderComponent,
+    ColorPickerComponent
   ],
   styles: [`
     .light-switch-button {
@@ -67,6 +71,7 @@ export class LightWidgetComponent
   ieeeAddress = computed(() => this.device()?.device?.ieee_address || '');
   readonly debouncedTempChange = wrapDebounce(this.onTempChange.bind(this), 300);
   readonly debouncedBrightnessChange = wrapDebounce(this.onBrightnessChange.bind(this), 300);
+  readonly debouncedColorChange = wrapDebounce(this.onColorChange.bind(this), 300);
 
   ngOnInit(): void {
     this.sensorsService.listen(this.ieeeAddress(), (data => {
@@ -85,5 +90,9 @@ export class LightWidgetComponent
 
   onBrightnessChange(brightness: number) {
     this.sensorsService.adjustBrightness(this.device()!.device!.ieee_address, brightness);
+  }
+
+  onColorChange(colorRGB: { r: number; g: number; b: number }) {
+    this.sensorsService.changeColor(this.device()!.device!.ieee_address, colorRGB);
   }
 }

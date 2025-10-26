@@ -55,4 +55,17 @@ export class LightSensorService {
       brightness: Math.abs(Math.ceil(clampedBrightness)),
     });
   }
+
+  changeColor(
+    name: string,
+    color: { r: number; g: number; b: number }
+  ) {
+    this._sensorsService.sendCommand(name, {
+      color: {
+        r: Math.abs(Math.ceil(color.r)),
+        g: Math.abs(Math.ceil(color.g)),
+        b: Math.abs(Math.ceil(color.b)),
+      },
+    });
+  }
 }
