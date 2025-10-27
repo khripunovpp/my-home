@@ -15,6 +15,14 @@ export interface Widget {
 })
 export class DashboardService {
   constructor() {
+    this._devicesService.getOptions().subscribe({
+      next: (options) => {
+        console.log('Device options loaded:', options);
+      },
+      error: (err) => {
+        console.error('Failed to load device options:', err);
+      }
+    })
   }
 
   private readonly _devicesService = inject(DevicesService);

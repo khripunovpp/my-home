@@ -19,6 +19,10 @@ export class DevicesService {
     );
   }
 
+  getOptions() {
+    return this._apiService.get('home/devices/options');
+  }
+
   private _toModel(raw: any) {
     const payload = raw['payload'];
     return topicMessageModelFactory<DevicesModel>('zigbee2mqtt/bridge/devices', payload);
