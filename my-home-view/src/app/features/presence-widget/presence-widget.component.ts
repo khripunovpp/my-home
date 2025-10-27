@@ -1,6 +1,6 @@
-import {Component, inject, input, OnInit, signal} from '@angular/core';
+import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
 import {PresenceSensorService} from '../../shared/service/presence-sensor.service';
-import {DeviceSingleModel} from '../../../../../shared/devices/device-single.model';
+import {WidgetController} from '../widget/widget.controller';
 
 @Component({
   selector: 'my-presence',
@@ -48,13 +48,18 @@ export class PresenceWidgetComponent
   constructor() {
   }
 
-  device = input<DeviceSingleModel>();
   readonly sensorsService = inject(PresenceSensorService);
   readonly presence = signal(false)
-
-  ngOnInit(): void {
+  listenEffect = effect(() => {    if (!this.device()) {
+      return;
+    }
     this.sensorsService.listen(this.device()!.device!.ieee_address, (data => {
       this.presence.set((data as any).presence);
     }));
+  });
+  private readonly _widgetController = inject(WidgetController);
+  device = computed(() => this._widgetController.device());
+
+  ngOnInit(): void {
   }
 }

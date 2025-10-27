@@ -1,6 +1,6 @@
-import {Component, computed, inject, input, OnInit, signal} from '@angular/core';
+import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
 import {TemperatureSensorService} from '../../shared/service/temperature-sensor.service';
-import {DeviceSingleModel} from '../../../../../shared/devices/device-single.model';
+import {WidgetController} from '../widget/widget.controller';
 
 @Component({
   selector: 'my-temperature',
@@ -59,7 +59,6 @@ export class TemperatureWidgetComponent
   constructor() {
   }
 
-  device = input<DeviceSingleModel>();
   readonly tempMap = new Map([
     [[-100, 5], 'freezing'],
     [[5, 15], 'cold'],
@@ -94,11 +93,19 @@ export class TemperatureWidgetComponent
     }
     return colors.map((c, i) => `--t-color-${i + 1}: ${c}`).join('; ');
   });
-
-  ngOnInit(): void {
+  listenEffect = effect(() => {
+    if (!this.device()) {
+      return;
+    }
     this.sensorsService.listen(this.device()!.device!.ieee_address, (data => {
       this.temperature.set(data as any);
     }));
+  });
+  private readonly _widgetController = inject(WidgetController);
+  device = computed(() => this._widgetController.device());
+
+  ngOnInit(): void {
+
   }
 
   private _getTempClass(temp: number): string {

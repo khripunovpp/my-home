@@ -8,8 +8,6 @@ import iro from '@jaames/iro';
   styles: [`
     :host {
       display: block;
-      width: 200px; /* можно менять через Input */
-      height: 200px;
     }
 
     div {

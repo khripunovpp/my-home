@@ -8,6 +8,7 @@ import {TemperatureWidgetComponent} from '../temperature-widget/temperature-widg
 import {firstValueFrom} from 'rxjs';
 import {DashboardService} from './dashboard.service';
 import {NgComponentOutlet} from '@angular/common';
+import {WidgetSlotComponent} from '../widget/widget-slot.component';
 
 @Component({
   selector: 'my-home-dashboard',
@@ -20,20 +21,23 @@ import {NgComponentOutlet} from '@angular/common';
         @switch (widget.type) {
           @case ('light') {
             <my-grid-cell>
-              <ng-container
-                *ngComponentOutlet="LightWidgetComponent; inputs: {device:widget.device}"></ng-container>
+              <my-widget-slot [device]="widget.device">
+                <my-light></my-light>
+              </my-widget-slot>
             </my-grid-cell>
           }
           @case ('motion') {
             <my-grid-cell>
-              <ng-container
-                *ngComponentOutlet="PresenceWidgetComponent; inputs: {device:widget.device}"></ng-container>
+              <my-widget-slot [device]="widget.device">
+                <my-presence></my-presence>
+              </my-widget-slot>
             </my-grid-cell>
           }
           @case ('temperature') {
             <my-grid-cell>
-              <ng-container
-                *ngComponentOutlet="TemperatureWidgetComponent; inputs: {device:widget.device}"></ng-container>
+              <my-widget-slot [device]="widget.device">
+                <my-temperature></my-temperature>
+              </my-widget-slot>
             </my-grid-cell>
           }
         }
@@ -44,7 +48,11 @@ import {NgComponentOutlet} from '@angular/common';
     GridCellComponent,
     HomeGridComponent,
     PairButtonComponent,
-    NgComponentOutlet
+    NgComponentOutlet,
+    WidgetSlotComponent,
+    LightWidgetComponent,
+    PresenceWidgetComponent,
+    TemperatureWidgetComponent
   ],
   styles: [`
     :host {
@@ -61,10 +69,6 @@ import {NgComponentOutlet} from '@angular/common';
 export class DashboardComponent {
   constructor() {
   }
-
-  protected readonly LightWidgetComponent = LightWidgetComponent;
-  protected readonly PresenceWidgetComponent = PresenceWidgetComponent;
-  protected readonly TemperatureWidgetComponent = TemperatureWidgetComponent;
   private readonly _dashboardService = inject(DashboardService);
   private resource = resource({
     params: () => ({}),
