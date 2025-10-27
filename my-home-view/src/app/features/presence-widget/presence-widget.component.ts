@@ -1,5 +1,5 @@
 import {Component, inject, input, OnInit, signal} from '@angular/core';
-import {PresenceSensorService} from '../../shared/sensors/presence-sensor.service';
+import {PresenceSensorService} from '../../shared/service/presence-sensor.service';
 import {DeviceSingleModel} from '../../../../../shared/devices/device-single.model';
 
 @Component({

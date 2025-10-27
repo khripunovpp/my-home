@@ -1,10 +1,10 @@
 import {Component, computed, inject, input, OnInit, signal} from '@angular/core';
-import {LightSensorService} from '../../../shared/sensors/light-sensor.service';
+import {LightSensorService} from '../../../shared/service/light-sensor.service';
 import {lightSensorFromJson} from '../../../../../../shared/light/light-sensor.factory';
 import {DeviceSingleModel} from '../../../../../../shared/devices/device-single.model';
-import {SliderComponent} from '../../../shared/slider.component';
+import {SliderComponent} from '../../../shared/ui/slider.component';
 import {wrapDebounce} from '../../../../../../shared/helpers/debounce.helpers';
-import {ColorPickerComponent} from '../../../shared/color-picker.component';
+import {ColorPickerComponent} from '../../../shared/ui/color-picker.component';
 
 @Component({
   selector: 'my-light',

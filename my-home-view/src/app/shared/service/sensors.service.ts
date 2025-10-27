@@ -1,5 +1,5 @@
 import {inject, Injectable, signal} from '@angular/core';
-import {SocketService} from '../socket.service';
+import {SocketService} from './socket.service';
 
 @Injectable({
   providedIn: 'root',

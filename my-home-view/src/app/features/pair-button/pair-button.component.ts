@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {SensorsService} from '../../shared/sensors/sensors.service';
+import {SensorsService} from '../../shared/service/sensors.service';
 
 @Component({
   selector: 'my-home-pair-button',

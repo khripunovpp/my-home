@@ -1,9 +1,9 @@
 import {inject, Injectable} from '@angular/core';
-import {DevicesService} from './devices.service';
+import {DevicesService} from '../../shared/service/devices.service';
 import {map} from 'rxjs';
-import {estimateDeviceType} from '../../../../shared/helpers/devices.helpers';
-import {DevicesModel} from '../../../../shared/devices/devices.model';
-import {DeviceSingleModel} from '../../../../shared/devices/device-single.model';
+import {estimateDeviceType} from '../../../../../shared/helpers/devices.helpers';
+import {DevicesModel} from '../../../../../shared/devices/devices.model';
+import {DeviceSingleModel} from '../../../../../shared/devices/device-single.model';
 
 export interface Widget {
   device: DeviceSingleModel

@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {ApiService} from './api.service';
-import {topicMessageModelFactory} from '../../../../shared/topic-message-model.factory';
-import {DevicesModel} from '../../../../shared/devices/devices.model';
+import {topicMessageModelFactory} from '../../../../../shared/topic-message-model.factory';
+import {DevicesModel} from '../../../../../shared/devices/devices.model';
 import {map} from 'rxjs';
 
 @Injectable({

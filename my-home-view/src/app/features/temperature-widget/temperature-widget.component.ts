@@ -1,5 +1,5 @@
 import {Component, computed, inject, input, OnInit, signal} from '@angular/core';
-import {TemperatureSensorService} from '../../shared/sensors/temperature-sensor.service';
+import {TemperatureSensorService} from '../../shared/service/temperature-sensor.service';
 import {DeviceSingleModel} from '../../../../../shared/devices/device-single.model';
 
 @Component({

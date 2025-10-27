@@ -6,7 +6,7 @@ import {PairButtonComponent} from '../pair-button/pair-button.component';
 import {PresenceWidgetComponent} from '../presence-widget/presence-widget.component';
 import {TemperatureWidgetComponent} from '../temperature-widget/temperature-widget.component';
 import {firstValueFrom} from 'rxjs';
-import {DashboardService} from '../../shared/dashboard.service';
+import {DashboardService} from './dashboard.service';
 import {NgComponentOutlet} from '@angular/common';
 
 @Component({
