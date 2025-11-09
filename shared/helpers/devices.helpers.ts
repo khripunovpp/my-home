@@ -17,7 +17,9 @@ export const estimateDeviceType = (device?: ZigbeeDevice): string => {
     if (desc.indexOf('switch') !== -1) {
       return 'switch';
     }
-    if (desc.indexOf('light') !== -1) {
+    if (desc.indexOf('light') !== -1
+      || desc.indexOf('lamp') !== -1
+      || desc.indexOf('bulb') !== -1) {
       return 'light';
     }
   }

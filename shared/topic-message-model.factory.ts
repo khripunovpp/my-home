@@ -17,6 +17,7 @@ export function topicMessageModelFactory(topic: Topic, jsonString: string): Base
       case 'zigbee2mqtt/presence_sensor':
         return presenceSensorFromJson(json);
       case 'zigbee2mqtt/office_lamp':
+      case 'zigbee2mqtt/0x08fd52fffe3309e2':
         return lightSensorFromJson(json);
       case 'zigbee2mqtt/bridge/devices':
         return devicesFromJson(json);
